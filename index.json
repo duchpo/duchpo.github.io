@@ -1,0 +1,127 @@
+[
+{
+	"uri": "http://duchpo.github.io/5-cleanup/5.1-delete-amazon-s3-buckets/",
+	"title": "Delete Amazon S3 Bukets",
+	"tags": [],
+	"description": "",
+	"content": "Cleaning Up Amazon S3 Buckets Navigate to Amazon S3 in the AWS Management Console. Locate and open the automatically created buckets, including: Buckets starting with sample-data The sagemaker-us-xxx bucket The cf-templates-XX bucket (used for storing CloudFormation templates) Select all objects within each bucket and click Delete. If prompted, type permanently delete in the confirmation box. After clearing the contents, proceed to delete the S3 Buckets from the bucket list. "
+},
+{
+	"uri": "http://duchpo.github.io/1-introduce/",
+	"title": "Introduction",
+	"tags": [],
+	"description": "",
+	"content": "Objectives Artificial Intelligence (AI) can be used in clinical documentation to automate tasks such as data entry, extracting information from medical records, and summarizing patient information. AI assistants can also help doctors generate notes without having to navigate or edit within the Electronic Health Record (EHR).\n📌 Automate the clinical note generation process using AI, allowing doctors and medical staff to save time on documentation and focus more on patient care. 📌 Integrate AWS services such as HealthScribe, Transcribe, and Bedrock to build a seamless workflow from recording conversations → converting speech to text → summarizing and analyzing medical content → creating treatment plans and follow-ups. 📌 Improve the accuracy and consistency of medical data, minimizing errors in manual documentation. 📌 Support faster clinical decision-making for doctors by extracting key insights from patient conversations. By the end of this workshop, you will understand how to use AWS HealthScribe, Amazon Transcribe, and Amazon Bedrock to generate clinical documentation.\nThe process starts with a medical conversation in which a patient visits a general practitioner (GP) and describes their symptoms, or the patient consults a specialist for a specific issue. The conversation is transcribed into text using AWS HealthScribe, with audio files stored in Amazon S3 and speech converted to text via Amazon Transcribe. The content is processed and refined using Prompt Engineering: a SageMaker Notebook Instance integrates AI models within a Jupyter Notebook for data preparation. Amazon Bedrock utilizes large language models (LLMs) to summarize conversations and generate concise, structured clinical notes. Final Output (Clinical Documentation): After processing and summarization, the system generates three key types of documents: Clinical Assessment: Evaluates the patient\u0026rsquo;s health condition based on the conversation. Treatment Plan: Suggests a treatment protocol based on extracted information. Follow-Up Recommendations: Proposes follow-up appointments or next steps for the patient. Overview of Tools and Services Used in the Workshop AWS HealthScribe: A specialized AI service that automatically documents medical conversations, identifies speakers, extracts medical terms, and generates clinical notes. Amazon Transcribe: A speech-to-text service that supports speaker diarization and improves accuracy with customizable medical vocabulary. Amazon Bedrock: Provides access to foundation models such as Claude 3 to summarize, analyze, and generate clinical notes from medical data. Amazon S3: A cloud storage service for securely storing audio recordings, transcripts, and medical data with scalable capacity. Amazon SageMaker: A platform for training and deploying AI/ML models, supporting medical data processing and refinement in Jupyter Notebook environments. "
+},
+{
+	"uri": "http://duchpo.github.io/",
+	"title": "Overview",
+	"tags": [],
+	"description": "",
+	"content": "Applying AI for Automated Clinical Note Generation with AWS HealthScribe, Amazon Comprehend Medical and Amazon Bedrock. Overall In this workshop, you will use AWS HealthScribe, Amazon Transcribe, and Amazon Bedrock to explore different approaches for transcribing and summarizing consultations between patients and healthcare providers and formatting the output as clinical notes.\nContent Introduction Preparation steps Implementation steps Workshop Conclusions Clean up resources Future Expansion Directions "
+},
+{
+	"uri": "http://duchpo.github.io/3-implementation-steps/3.1-process-audio-files-using-healthscribe-apis/",
+	"title": "Process audio files using HealthScribe APIs",
+	"tags": [],
+	"description": "",
+	"content": "In this section, you will learn how to use the AWS HealthScribe Python API to call the service and integrate it with other AWS services.\nOpen the 1_HealthScribe_API.ipynb file in the SageMaker Notebook Instance under the Files tab. Select conda_python3 as the kernel. Execute the notebook\u0026rsquo;s content in the listed order to complete the lab: Set up the environment → Install the latest version of the boto3 library. Initialize AWS HealthScribe Job → Upload the audio file to Amazon S3 and start a job to convert speech to text. Monitor the job status → Wait for the processing to complete. Analyze the results → Retrieve the medical summary file from S3 and extract the treatment plan. "
+},
+{
+	"uri": "http://duchpo.github.io/3-implementation-steps/3.2-comprehend-medical-with-healthscribe/",
+	"title": "Comprehend Medical with HealthScribe",
+	"tags": [],
+	"description": "",
+	"content": "In this section, we will integrate AWS HealthScribe with Amazon Comprehend Medical to extract key medical information from medical transcripts. We will also label medical conditions and medications using ICD-10-CM and RxNorm.\nOpen the 2_HealthScribe_ComprehendMedical.ipynb file in the Files tab of your SageMaker Notebook Instance. Select conda_python3 as the kernel. Execute the notebook cells in order to complete the lab: Retrieve the treatment plan from AWS HealthScribe: Use %store -r plan to retrieve data from the previous notebook and verify the content of the treatment plan using print(plan). Classify diseases using ICD-10-CM: Call the Amazon Comprehend Medical API to extract disease codes from the treatment plan, then return a list of detected conditions along with their corresponding ICD-10-CM codes. Identify medications using RxNorm: Extract and match medication names using RxNorm. Display results: Print the list of detected medical conditions and medications in JSON format to make it easier for further processing. "
+},
+{
+	"uri": "http://duchpo.github.io/5-cleanup/5.2-delete-cloudformation-stack/",
+	"title": "Delete CloudFormation Stack",
+	"tags": [],
+	"description": "",
+	"content": "Cleaning Up AWS CloudFormation Stacks Navigate to AWS CloudFormation in the AWS Management Console. Search for and select the Stack related to your project. Click Delete to initiate the deletion process. Wait for the deletion to complete before proceeding to the next step. "
+},
+{
+	"uri": "http://duchpo.github.io/2-prerequiste/",
+	"title": "Preparation steps",
+	"tags": [],
+	"description": "",
+	"content": "If you have access to the AWS Management Console with administrative privileges, you can use your AWS account to initiate this workshop.\nAWS CloudFormation template: Download Sample audio file: Download Source Code: Download Launch a CloudFormartion Stack Navigate to the AWS Management Console Select the region: us-east-1 (N. Virginia) Search for \u0026ldquo;CloudFormation\u0026rdquo; in the AWS Console. Click Create stack and select With new resources (standard). In the Create Stack wizard: Select Upload a template file. In the Specify Template section : Select Upload Template File. Click Choose file . Navigate to the folder where you downloaded the AWS CloudFormation file and select the main.yml file. Specify Stack Details: Enter the stack name (e.g., ai-lab). Keep the default values for the parameters. Click Next. Click Next in the \u0026ldquo;Configure stack options\u0026rdquo; section. Review the configuration in the \u0026ldquo;Review and create\u0026rdquo; section. Scroll to the bottom, check the acknowledgment box. Select the Submit button to create the resource. After completing CloudFormation creation:\nS3 buckets: sample-data-xx: Stores audio files for processing. hs-output-xx: Stores transcription results from HealthScribe. SageMaker Notebook named SageMakerNotebookInstance-xx in us-east-1 . Source Code Download and import it into the SageMaker notebook instance. IAM Role to execute Jupyter Notebook operations. Uploading the Audio File to S3 Navigate to Amazon S in the AWS Management Console. Select the bucket that starts with sample-data-xx. Click Upload \u0026gt; Add Files. Select the previously downloaded audio file. Click Upload at the bottom of the page to complete the upload. Updating the IAM Role Navigate to IAM in the AWS Management Console. Click Roles on the left menu. Search for your stack name (ai-lab). Select the role that contains \u0026raquo;-SageMakerNotebookRole-XX. Click Add Permissions \u0026gt; Create Inline Policy. In Select Service, search and select IAM. In Allowed Actions, enter PassRole. Check the box next to PassRole. Select All resources. Click Next. Enter a name for the policy. Create Policy to finalize. Once done. Find and save the following information:\n[S3_BUCKET_NAME] : The S3 URI where the audio file was uploaded. [OBJECT_NAME] : The full file name, including the extension (e.g., lower-back-consultation.m4a). [IAM_ROLE] : The ARN of the IAM role (\u0026raquo;-SageMakerNotebookRole-XX). Example: os.environ[\u0026rsquo;S3_BUCKET_NAME\u0026rsquo;] = \u0026lsquo;sample-data-xxxx\u0026rsquo; os.environ[\u0026rsquo;OBJECT_NAME\u0026rsquo;] = \u0026rsquo;lower-back-consultation.mp4' os.environ[\u0026rsquo;IAM_ROLE\u0026rsquo;] = \u0026lsquo;arn:aws:iam::XXXX:role/XXXX-SageMakerNotebookRole-XXXX\u0026rsquo; Enable Amazon Bedrock Model Access: Access to Amazon Bedrock models is not granted by default. To enable access: Switch to the Oregon (us-west-2) region. Select Model Access from the left-hand menu in the Amazon Bedrock console. Click Enable Specific Models. Check the boxes next to the models you want to enable: Claude 3 Sonnet and Claude 3 Haiku (or the latest version available, e.g., Claude 3.5). Click Next to preview the changes. Review the changes and click Submit. Changes may take a few minutes to apply. If successful, the Access Status will change to Granted. Opening Jupyter Notebook in Amazon SageMaker: Open the Amazon SageMaker console in AWS us-east-1 (N. Virginia). Click Notebooks in the left menu to list available instances. Locate the notebook instance starting with SageMakerNotebookInstance- and click Open JupyterLab. "
+},
+{
+	"uri": "http://duchpo.github.io/3-implementation-steps/3.3-bedrock-integration/",
+	"title": "Bedrock Integration",
+	"tags": [],
+	"description": "",
+	"content": "In this section, we will use Amazon Bedrock with the Claude v3 Sonnet model (Anthropic) to extract ICD-10 and CPT codes from summaries generated by AWS HealthScribe.\nOpen the 3_HealthScribe_Bedrock.ipynb file in the Files tab of your SageMaker Notebook Instance. Select conda_python3 as the kernel. Execute the notebook cells in order to complete the lab: List available Large Language Models (LLMs) from Anthropic in Amazon Bedrock. Integrate AWS HealthScribe with Amazon Bedrock: Send the summary from HealthScribe to Bedrock to extract ICD-10 and CPT codes. Extract ICD-10 codes from the HealthScribe summary. Extract CPT codes from HealthScribe. "
+},
+{
+	"uri": "http://duchpo.github.io/5-cleanup/5.3-delete-iam-roles/",
+	"title": "Delete IAM roles",
+	"tags": [],
+	"description": "",
+	"content": "Cleaning Up IAM Roles and Amazon SageMaker Notebooks Navigate to IAM (Identity and Access Management) in the AWS Console. Select Roles and locate the IAM roles that were automatically created during deployment. Check if the roles are currently in use by any service. If they are no longer needed, select Delete to remove the IAM role. Check whether the notebook in Amazon SageMaker has been deleted.\n"
+},
+{
+	"uri": "http://duchpo.github.io/3-implementation-steps/",
+	"title": "Implementation steps",
+	"tags": [],
+	"description": "",
+	"content": "In this lab, you will use AWS HealthScribe, Amazon Transcribe, and Amazon Bedrock to explore different approaches to transcribing and summarizing consultations between patients and healthcare providers, as well as formatting the output as clinical notes.\nContent 3.1. Process audio files using HealthScribe APIs 3.2. Comprehend Medical with HealthScribe 3.3. Bedrock Integration 3.4. Using Amazon Transcribe and Amazon Bedrock 3.5. Generate Clinical Notes 3.6. Using Transcribe Medical\n"
+},
+{
+	"uri": "http://duchpo.github.io/3-implementation-steps/3.4-using-amazon-transcribe-and-amazon-bedrock/",
+	"title": "Using Amazon Transcribe and Amazon Bedrock",
+	"tags": [],
+	"description": "",
+	"content": "In this section, we will use Amazon Transcribe to convert speech into text and Claude 3 (Anthropic) to summarize the conversation and generate a structured treatment plan.\nOpen the4.1_Transcribe_Bedrock.ipynb file in the Files tab of your SageMaker Notebook Instance. Select conda_python3 as the kernel. Execute the notebook cells in order to complete the lab: Download and upload data: Retrieve an audio recording from a public source. Upload the audio file to Amazon S3 for processing Convert speech to text: Use Amazon Transcribe to transcribe the doctor-patient conversation. Enable speaker identification to differentiate between the doctor and the patient. Preprocess the text and use Claude 3 (Anthropic) models: Utilize Claude 3 Sonnet and Claude 3 Haiku to generate a structured treatment plan. Display the treatment plan in Markdown format. "
+},
+{
+	"uri": "http://duchpo.github.io/4-summary/",
+	"title": "Workshop Conclusions",
+	"tags": [],
+	"description": "",
+	"content": "Conclusion In this workshop, we explored how AI applications can automate clinical note generation, leveraging the power of AWS HealthScribe, Amazon Comprehend Medical, and Amazon Bedrock. These technologies not only enhance the accuracy of medical records but also optimize physician workflows, reducing administrative burdens and improving overall efficiency in healthcare systems.\nSpeech Transcription and Speaker Identification with AWS HealthScribe\nAWS HealthScribe converts doctor-patient conversations into text. Speaker Identification helps differentiate between the doctor and the patient, improving transcription accuracy. Medical Information Extraction with Amazon Comprehend Medical\nUses NLP to identify and extract critical medical entities such as symptoms, diagnoses, medications, and treatments. Generates structured records from conversations, facilitating integration into Electronic Health Records (EHRs). Clinical Note Generation with Amazon Bedrock and Claude 3 LLM\nClaude 3 LLM assists in summarizing conversations and generating treatment plans. The output is structured into a Clinical Plan, including: Chief Complaint History of Present Illness Review of Systems Past Medical History Assessment Plan Physical Examination Impact and Benefits ✅ Time-saving: Allows doctors to focus more on patient care rather than manual documentation.\n✅ Improved accuracy: Reduces human errors in medical record-keeping.\n✅ Seamless integration: Easily connects with EHR systems for a smoother workflow.\n✅ Enhanced patient experience: Frees up more time for doctors to engage with patients instead of paperwork.\nThe Future of AI in Healthcare Artificial Intelligence is ushering in a new era in healthcare, where automation not only enhances efficiency but also improves treatment quality. In the future, combining AI with Machine Learning, IoT, and Blockchain will help create a smarter, safer, and more personalized healthcare system.\n"
+},
+{
+	"uri": "http://duchpo.github.io/5-cleanup/",
+	"title": "Clean up resources",
+	"tags": [],
+	"description": "",
+	"content": "To clean up resources after completing the Workshop, you can follow the steps below, focusing on deleting the corresponding resources in the correct order. At the top of the AWS Management Console, in the search bar, search for and select the respective services to clean up as follows:\n5.1. Delete Amazon S3 Buckets. 5.2. Delete CloudFormation Stack.\n5.3. Delete IAM roles.\n"
+},
+{
+	"uri": "http://duchpo.github.io/3-implementation-steps/3.5-generate-clinical-notes/",
+	"title": "Generate Clinical Notes",
+	"tags": [],
+	"description": "",
+	"content": "This section presents a step-by-step scenario for organizing the storage, transcription, and logging of doctor-patient recordings, as well as generating clinical plans using non-specialized services. This example can be extended to include authentication steps (with human oversight), safeguards, and downstream systems (such as a Patient Management System) to store clinical plans in patient records.\nTranscribing and Logging Recordings with Amazon Transcribe As shown in the architecture diagram below, we will select a recording from an S3 bucket after uploading them and create a batch transcription job using Amazon Transcribe to transcribe the recording and identify speakers (logging).\nProcessing Recordings with Amazon Transcribe Specify the filename of one of the available recordings. Upload the recording to Amazon S3, typically in the folder rawdata/Audio Recordings/. In this workshop, we will use a file named RES0038.mp3. You can select any file under the prefix rawdata/Audio Recordings/.\nInitialize a transcription job with Amazon Transcribe by providing:\nLanguageCode: The spoken language in the file (or use IdentifyLanguage). MediaFileUri: The S3 file path. ShowSpeakerLabels: Enable speaker identification. MaxSpeakerLabels: Define the number of speakers (e.g., 2 for doctor-patient conversations). Check job status: Wait for the job to complete (typically up to 3 minutes).\nAnalyzing Transcription Results Download the JSON output file from S3 and convert it into a Pandas DataFrame for easier processing. Reshape the data and group each speaker\u0026rsquo;s utterances to analyze the conversation content. Generating a Clinical Plan with Claude 3 (Amazon Bedrock) Prepare a prompt for Claude 3 to summarize the conversation and generate a clinical plan, including:\nChief Complaint (Reason for visit) History of Present Illness Review of Systems (Symptom evaluation) Assessment \u0026amp; Plan (Diagnosis and treatment plan) Physical Examination Send the prompt to Amazon Bedrock for processing with Claude 3 (Sonnet or Haiku).\nDisplay responses in real-time using the invoke_model_with_response_stream API.\n"
+},
+{
+	"uri": "http://duchpo.github.io/6-future-expansion-directions/",
+	"title": "Future Expansion Directions",
+	"tags": [],
+	"description": "",
+	"content": "Future Expansion Directions Integration with Electronic Health Record (EHR) Systems:\nUtilize standard APIs like FHIR (Fast Healthcare Interoperability Resources) to ensure compatibility across various healthcare systems.\nEnhancing Accuracy with Machine Learning:\nTrain AI models using specialized datasets from different medical specialties to improve the recognition of medical terminology. Leverage Amazon SageMaker to fine-tune speech recognition and natural language processing models. Integrating Generative AI for Decision Support:\nCombine with Claude 3.5, GPT-4, or Amazon Titan to suggest treatment plans based on clinical notes. Develop AI-powered chatbots to assist doctors in diagnosis and patient consultations. Developing a Medical Data Analytics Dashboard:\nCreate an interactive dashboard using Amazon QuickSight or Streamlit to analyze disease trends and treatment effectiveness.\nApplying AI for Diagnostic Assistance:\nIntegrate Amazon Rekognition for analyzing medical images such as X-rays, MRIs, and ultrasounds. Connect with medical sensors and IoT devices to analyze real-time patient health data. "
+},
+{
+	"uri": "http://duchpo.github.io/3-implementation-steps/3.6-using-transcribe-medical/",
+	"title": "Using Transcribe Medical",
+	"tags": [],
+	"description": "",
+	"content": "Amazon Transcribe Medical accurately transcribes medical terminology, including drug names, procedures, and even conditions or diseases. It provides specialized transcription expertise for primary and specialty care domains such as cardiology, neurology, obstetrics and gynecology, pediatrics, oncology, radiology, and urology.\nSteps to Use Amazon Transcribe Medical with Amazon Bedrock\nOpen the file 4.2_TranscribeMedical_Bedrock.ipynb in the Files tab within SageMaker Notebook Instance. Select conda_python3. Follow the steps in the notebook to complete the lab: Processing Audio and Converting Speech to Text Download and store the interview recording in Amazon S3. Start a medical transcription job using Amazon Transcribe Medical, enabling speaker diarization to identify multiple speakers. Monitor job status until completion and save the output as a JSON file. Extracting Data from the Transcription Store the transcription results as a structured table containing: Utterance Start/End Time Speaker Label Transcript Content Generating Clinical Notes Using Claude 3 Create a prompt containing the conversation transcript and request Claude 3 to summarize it into key sections: Chief Complaint History of Present Illness Review of Systems Past Medical History Assessment Plan Physical Examination Send the request to the Claude 3 model (Sonnet or Haiku) on Amazon Bedrock. "
+},
+{
+	"uri": "http://duchpo.github.io/categories/",
+	"title": "Categories",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "http://duchpo.github.io/tags/",
+	"title": "Tags",
+	"tags": [],
+	"description": "",
+	"content": ""
+}]
